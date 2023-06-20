@@ -4,5 +4,5 @@
 2. Then run:
 ```shell
 cd projects/batch-jobs
-poetry install --no-root` to set up the project 
-```
+poetry install --no-root
+``` 
