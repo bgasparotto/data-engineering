@@ -8,6 +8,7 @@ packages = [{include = "batch_jobs"}]
 
 [tool.poetry.dependencies]
 python = "^3.10"
+pyspark = "^3.4.0"
 
 
 [build-system]
