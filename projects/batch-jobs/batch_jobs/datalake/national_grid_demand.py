@@ -3,10 +3,10 @@ from pyspark.sql.functions import col, to_date, coalesce
 
 from batch_jobs.util import spark_session_provider
 from batch_jobs.util.extractor import extract_csv_from_s3
-from batch_jobs.util.loaders import load_into_s3
+from batch_jobs.util.loaders import load_parquet_into_s3
 
 
-def transform(df_demand: DataFrame) -> DataFrame:
+def process(df_demand: DataFrame) -> DataFrame:
     return df_demand.select(
         col("settlement_date"),
         col("settlement_period").cast("int"),
@@ -23,6 +23,8 @@ def transform(df_demand: DataFrame) -> DataFrame:
             to_date("settlement_date"),
             to_date("settlement_date", "dd-MMM-yyyy")
         )
+    ).withColumn(
+        "dt", col("settlement_date")
     ).orderBy(
         "settlement_date",
         "settlement_period",
@@ -33,7 +35,7 @@ if __name__ == "__main__":
     spark: SparkSession = spark_session_provider.get_or_create()
 
     df_input: DataFrame = extract_csv_from_s3(spark, bucket="national-grid-eso", path="demand")
-    df_output: DataFrame = transform(df_input)
-    load_into_s3(df_output)
+    df_output: DataFrame = process(df_input)
+    load_parquet_into_s3(df_output, bucket="datalake", path="demand")
 
     spark.stop()
