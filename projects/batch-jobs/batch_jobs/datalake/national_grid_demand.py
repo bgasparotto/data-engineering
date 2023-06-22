@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession, DataFrame
-from pyspark.sql.functions import col, to_date, when
+from pyspark.sql.functions import col, to_date, coalesce
 
 from batch_jobs.util import spark_session_provider
 from batch_jobs.util.extractor import extract_from_s3
@@ -19,10 +19,8 @@ def transform(df_demand: DataFrame) -> DataFrame:
         col("embedded_solar_generation").cast("int"),
     ).withColumn(
         "settlement_date",
-        when(
-            to_date("settlement_date").isNotNull(),
-            to_date("settlement_date")
-        ).otherwise(
+        coalesce(
+            to_date("settlement_date"),
             to_date("settlement_date", "dd-MMM-yyyy")
         )
     ).orderBy(
