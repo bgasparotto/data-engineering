@@ -8,6 +8,9 @@ def get_or_create() -> SparkSession:
     conf.set("spark.hadoop.fs.s3a.access.key", "test_key_id")
     conf.set("spark.hadoop.fs.s3a.secret.key", "test_access_key")
     conf.set("spark.hadoop.fs.s3a.path.style.access", "true")
-    conf.set("spark.jars.packages", "org.apache.hadoop:hadoop-aws:3.3.1")
+    conf.set(
+        "spark.jars.packages",
+        "org.apache.hadoop:hadoop-aws:3.3.1,org.postgresql:postgresql:42.6.0"
+    )
 
     return SparkSession.builder.config(conf=conf).getOrCreate()

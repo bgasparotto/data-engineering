@@ -3,7 +3,7 @@ from pyspark.sql.functions import col, to_date, coalesce
 
 from batch_jobs.util import spark_session_provider
 from batch_jobs.util.extractor import extract_csv_from_s3
-from batch_jobs.util.loaders import load_parquet_into_s3
+from batch_jobs.util.loader import load_parquet_into_s3
 
 
 def process(df_demand: DataFrame) -> DataFrame:
