@@ -1,8 +1,8 @@
 import pytest
-from pyspark.sql import SparkSession
 from pyspark.sql.types import StructType, StructField, DateType, IntegerType
 
 from batch_jobs.datalake.national_grid_demand import transform
+from batch_jobs.util import spark_session_provider
 
 
 @pytest.fixture(autouse=True)
@@ -14,7 +14,7 @@ def run_before_and_after_tests(spark):
 
 @pytest.fixture()
 def spark():
-    return SparkSession.builder.getOrCreate()
+    return spark_session_provider.get_or_create()
 
 
 @pytest.fixture()

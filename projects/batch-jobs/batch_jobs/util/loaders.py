@@ -1,5 +1,5 @@
 from pyspark.sql import DataFrame
 
 
-def load_into_db(df: DataFrame) -> None:
-    df.show()
+def load_into_s3(df: DataFrame) -> None:
+    df.show()  # WIP

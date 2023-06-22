@@ -4,6 +4,9 @@ services:
     image: localstack/localstack:2.1.0
     environment:
       - SERVICES=s3
+      - DEFAULT_REGION=eu-west-2
+      - AWS_ACCESS_KEY_ID=test_key_id
+      - AWS_SECRET_ACCESS_KEY=test_access_key
     ports:
       - "4566:4566"
     volumes:

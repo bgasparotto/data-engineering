@@ -1,6 +1,6 @@
 # Data Engineering
 
-Data Engineering concepts, notes and examples
+Data Engineering code examples for batch processing.
 
 ## Running things
 

@@ -1,8 +1,9 @@
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import col, to_date, when
 
-from batch_jobs.util.extractor import extract_from_csv
-from batch_jobs.util.loaders import load_into_db
+from batch_jobs.util import spark_session_provider
+from batch_jobs.util.extractor import extract_from_s3
+from batch_jobs.util.loaders import load_into_s3
 
 
 def transform(df_demand: DataFrame) -> DataFrame:
@@ -31,10 +32,10 @@ def transform(df_demand: DataFrame) -> DataFrame:
 
 
 if __name__ == "__main__":
-    spark: SparkSession = SparkSession.builder.getOrCreate()
+    spark: SparkSession = spark_session_provider.get_or_create()
 
-    df_input: DataFrame = extract_from_csv(spark, "national_grid_demand")
+    df_input: DataFrame = extract_from_s3(spark, "demand")
     df_output: DataFrame = transform(df_input)
-    load_into_db(df_output)
+    load_into_s3(df_output)
 
     spark.stop()
