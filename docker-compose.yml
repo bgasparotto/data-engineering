@@ -1,6 +1,8 @@
 version: '3.7'
 
 services:
+
+  # Data Lake storage
   localstack:
     image: localstack/localstack:2.1.0
     environment:
@@ -13,7 +15,13 @@ services:
     volumes:
       - ./compose/localstack:/etc/localstack/init/ready.d
       - ./datasets:/datasets
+    healthcheck:
+      test: ["CMD", "awslocal", "s3", "ls"]
+      interval: 10s
+      retries: 5
+      start_period: 5s
 
+  # Data Warehouse storage
   postgres:
     image: postgres:15.3
     environment:
@@ -24,3 +32,8 @@ services:
       - "5432:5432"
     volumes:
       - ./compose/postgres:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 10s
+      retries: 5
+      start_period: 5s
