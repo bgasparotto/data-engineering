@@ -50,3 +50,12 @@ services:
       interval: 10s
       retries: 5
       start_period: 10s
+
+  # Network debugging
+  network-multitool:
+    image: praqma/network-multitool:latest
+    healthcheck:
+      test: [ "CMD", "ping", "-c", "1", "localhost" ]
+      interval: 10s
+      retries: 5
+      start_period: 5s
