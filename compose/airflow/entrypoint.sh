@@ -8,7 +8,7 @@ airflow users create -u admin -p admin -r Admin -f Bruno -l Gasparotto -e bruno.
 
 echo "Starting webserver"
 airflow webserver --port 8080 &
-sleep 5 # wait until the webserver has written its logs
+sleep 5 # wait until the webserver has written its logs so the output is clearer
 
 echo "Starting scheduler"
 airflow scheduler
