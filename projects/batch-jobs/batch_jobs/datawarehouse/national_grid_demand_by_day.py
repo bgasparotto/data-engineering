@@ -1,7 +1,7 @@
 from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import avg, min, max, round, first, to_date
 
-from batch_jobs.util import spark_session_provider
+from batch_jobs.util import spark_session_provider, args_parser
 from batch_jobs.util.extractor import extract_parquet_from_s3
 from batch_jobs.util.loader import load_table_into_db
 
@@ -19,9 +19,10 @@ def process(df_demand: DataFrame) -> DataFrame:
 
 
 if __name__ == "__main__":
-    spark: SparkSession = spark_session_provider.get_or_create()
+    args = args_parser.read_args()
+    partition: str = args.partition
 
-    partition: str = "2009-04-01"
+    spark: SparkSession = spark_session_provider.get_or_create()
 
     df_input: DataFrame = extract_parquet_from_s3(spark, bucket="datalake", path="demand", partition=partition)
     df_output: DataFrame = process(df_input)
