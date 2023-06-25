@@ -37,3 +37,16 @@ services:
       interval: 10s
       retries: 5
       start_period: 5s
+
+  # Task orchestration
+  airflow:
+    build:
+      context: ./compose/airflow
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: [ "CMD", "airflow", "jobs", "check" ]
+      interval: 10s
+      retries: 5
+      start_period: 10s
