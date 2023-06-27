@@ -27,7 +27,7 @@ with DAG(
         command='spark-submit --packages="org.apache.hadoop:hadoop-aws:3.3.1,org.postgresql:postgresql:42.6.0" batch_jobs/datawarehouse/national_grid_demand_by_day.py --partition {{ ds }}',
         network_mode="data-engineering_default",
         auto_remove=True,
-        docker_url="unix://var/run/docker.sock",
+        docker_url="tcp://docker-proxy:2375",
     )
 
     end_dag = DummyOperator(

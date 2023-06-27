@@ -45,13 +45,25 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
     healthcheck:
       test: [ "CMD", "airflow", "jobs", "check" ]
       interval: 10s
       retries: 5
       start_period: 10s
+
+  # Proxy enabling Airflow to access the docker socket without root privileges
+  docker-proxy:
+    image: bobrik/socat
+    command: "TCP4-LISTEN:2375,fork,reuseaddr UNIX-CONNECT:/var/run/docker.sock"
+    ports:
+      - "2376:2375"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    healthcheck:
+      test: [ "CMD", "netstat", "-nlp", "|", "grep", ":2375" ]
+      interval: 10s
+      retries: 5
+      start_period: 5s
 
   # Network debugging
   network-multitool:
