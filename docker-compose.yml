@@ -41,7 +41,7 @@ services:
   # Task orchestration
   airflow:
     build:
-      context: ./compose/airflow
+      context: ./projects/airflow
       dockerfile: Dockerfile
     ports:
       - "8080:8080"
