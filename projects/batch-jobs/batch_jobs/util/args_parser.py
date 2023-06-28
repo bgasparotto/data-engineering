@@ -1,4 +1,17 @@
 from argparse import ArgumentParser
+from dataclasses import dataclass
+
+
+@dataclass
+class DatePartition:
+    column: str
+    value: str
+
+    def year(self) -> str:
+        return self.value[:4]
+
+    def __repr__(self):
+        return f"dt={self.value}"
 
 
 def read_args():

@@ -2,6 +2,7 @@ from pyspark.sql import SparkSession, DataFrame
 from pyspark.sql.functions import avg, min, max, round, first, to_date
 
 from batch_jobs.util import spark_session_provider, args_parser
+from batch_jobs.util.args_parser import DatePartition
 from batch_jobs.util.extractor import extract_parquet_from_s3
 from batch_jobs.util.loader import load_table_into_db
 
@@ -20,7 +21,7 @@ def process(df_demand: DataFrame) -> DataFrame:
 
 if __name__ == "__main__":
     args = args_parser.read_args()
-    partition: str = args.partition
+    partition = DatePartition("dt", args.partition)
 
     spark: SparkSession = spark_session_provider.get_or_create()
 
