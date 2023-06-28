@@ -1,7 +1,6 @@
 from datetime import datetime, timedelta
 from airflow import DAG
 from airflow.operators.docker_operator import DockerOperator
-from airflow.operators.dummy_operator import DummyOperator
 
 with DAG(
         "datawarehouse",
@@ -12,8 +11,18 @@ with DAG(
             'retry_delay': timedelta(minutes=10)
         }
 ) as dag:
-    start_dag = DummyOperator(
-        task_id="start_dag"
+    import_national_grid_demand = DockerOperator(
+        task_id="import_national_grid_demand",
+        image="batch-jobs:latest",
+        environment={
+            "AWS_ENDPOINT": "http://localstack:4566",
+            "POSTGRES_HOST": "postgres:5432",
+        },
+        container_name="import_national_grid_demand_{{ ds }}",
+        command='spark-submit --packages="org.apache.hadoop:hadoop-aws:3.3.1,org.postgresql:postgresql:42.6.0" batch_jobs/datalake/import_national_grid_demand.py --partition {{ ds }}',
+        network_mode="data-engineering_default",
+        auto_remove=True,
+        docker_url="tcp://docker-proxy:2375",
     )
 
     national_grid_demand_by_day = DockerOperator(
@@ -30,8 +39,4 @@ with DAG(
         docker_url="tcp://docker-proxy:2375",
     )
 
-    end_dag = DummyOperator(
-        task_id="end_dag"
-    )
-
-    start_dag >> national_grid_demand_by_day >> end_dag
+    import_national_grid_demand >> national_grid_demand_by_day

@@ -17,21 +17,23 @@ This project uses _docker compose_ to provide services that comprise the stack, 
 
 ## Running
 
-1. Run Docker Compose:
-```shell
-docker compose up -d
-```
-
-2. Build and run the Spark batch jobs container:
+1. Build the Spark batch jobs container:
 ```shell
 docker build -f projects/batch-jobs/Dockerfile -t batch-jobs:latest ./projects/batch-jobs
-docker run --network data-engineering_default -it --rm batch-jobs:latest bash
 ```
 
-3. Submit a job with `spark-submit`:
+2. Run Docker Compose:
 ```shell
-AWS_ENDPOINT="http://localstack:4566" POSTGRES_HOST="postgres:5432" spark-submit --packages="org.apache.hadoop:hadoop-aws:3.3.1,org.postgresql:postgresql:42.6.0" batch_jobs/datalake/national_grid_demand.py
+docker compose up --build
 ```
+
+3. Allow ~30s for everything to boot then go to Airflow at http://localhost:8080.
+
+4. Log in with user `admin` and password `admin`:
+
+5. Unpause the dag `datawarehouse`
+
+6. Observe the Dags in airflow and the container creation with `docker ps`
 
 ## Intellij
 
