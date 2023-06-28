@@ -38,11 +38,32 @@ services:
       retries: 5
       start_period: 5s
 
+  postgres_airflow:
+    image: postgres:15.3
+    environment:
+      - POSTGRES_DB=airflow
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    ports:
+      - "5442:5432"
+    volumes:
+      - ./compose/postgres:/docker-entrypoint-initdb.d
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "postgres" ]
+      interval: 10s
+      retries: 5
+      start_period: 5s
+
   # Task orchestration
   airflow:
     build:
       context: ./projects/airflow
       dockerfile: Dockerfile
+    depends_on:
+      - postgres_airflow
+    environment:
+      - AIRFLOW__CORE__SQL_ALCHEMY_CONN=postgresql://postgres:password@postgres_airflow:5432/airflow
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
     ports:
       - "8080:8080"
     healthcheck:
