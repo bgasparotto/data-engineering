@@ -22,7 +22,7 @@ This project uses _docker compose_ to provide services that comprise the stack, 
 docker compose up -d
 ```
 
-2. Builder and run the Spark batch jobs container:
+2. Build and run the Spark batch jobs container:
 ```shell
 docker build -f projects/batch-jobs/Dockerfile -t batch-jobs:latest ./projects/batch-jobs
 docker run --network data-engineering_default -it --rm batch-jobs:latest bash
