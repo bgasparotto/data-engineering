@@ -18,3 +18,8 @@ RUN apt install temurin-8-jre -y
 WORKDIR app
 RUN poetry config virtualenvs.create false
 RUN poetry install
+
+# runs Spark with an empty script so it caches external required packages before use
+ENV SPARK_EXTRA_PACKAGES "org.apache.hadoop:hadoop-aws:3.3.1,org.postgresql:postgresql:42.6.0"
+RUN touch /tmp/empty.py
+RUN spark-submit --packages=$SPARK_EXTRA_PACKAGES /tmp/empty.py
