@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from airflow import DAG
-from airflow.operators.docker_operator import DockerOperator
+from airflow.providers.docker.operators.docker import DockerOperator
 
 with DAG(
         "datawarehouse",
@@ -21,7 +21,7 @@ with DAG(
         container_name="import_national_grid_demand_{{ ds }}",
         command="bash -c 'spark-submit --packages=$SPARK_EXTRA_PACKAGES batch_jobs/datalake/import_national_grid_demand.py --partition {{ ds }}'",
         network_mode="data-engineering_default",
-        auto_remove=True,
+        auto_remove="True",
         docker_url="tcp://docker-proxy:2375",
     )
 
@@ -35,7 +35,7 @@ with DAG(
         container_name="national_grid_demand_by_day_{{ ds }}",
         command="bash -c 'spark-submit --packages=$SPARK_EXTRA_PACKAGES batch_jobs/datawarehouse/national_grid_demand_by_day.py --partition {{ ds }}'",
         network_mode="data-engineering_default",
-        auto_remove=True,
+        auto_remove="True",
         docker_url="tcp://docker-proxy:2375",
     )
 
