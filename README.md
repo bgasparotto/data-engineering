@@ -1,8 +1,8 @@
 # Data Engineering
 
-Data Engineering code examples for batch processing with Python, Spark and Airflow.
+Data Engineering code examples for batch processing with Python, PySpark, Airflow and AWS/Localstack.
 
-This project attempts to put together some data technology tools and concepts in a simple way, including
+This project attempts to put together a few data technology tools and concepts in a simple way, including
 batch processing, task orchestration and usage of different data storage technologies.
 
 ## Disclaimer
@@ -13,9 +13,15 @@ commits, I am trying to ensure the Git history tells a fair story of its evoluti
 This project uses _docker compose_ to provide services that comprise the stack, including:
 - **Localstack** for AWS S3 with initial datasets and S3 bucket as the datalake
 - **Postgres** as the data warehouse storage
-- **Airflow** for task orchestration - work in progress
+- **Airflow** for task orchestration
+- **Docker** for container management
 
-## Running
+## Projects
+
+- [batch-jobs](projects/batch-jobs) - Spark scripts with pyspark.
+- [airflow](projects/airflow) - Airflow DAGs and operators that run the batch jobs.
+
+## Running all together
 
 1. Build the Spark batch jobs container:
 ```shell
@@ -33,5 +39,5 @@ docker compose up --build
 
 ## Intellij
 
-1. Load the subproject [batch-jobs](projects/batch-jobs) as a project itself.
-2. Follow its [README.md](projects/batch-jobs/README.md) instructions.
+1. Load one of the projects such as [batch-jobs](projects/batch-jobs) as a project itself.
+2. Follow the respective `README.md` for build and run instructions.
