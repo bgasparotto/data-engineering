@@ -1,6 +1,6 @@
 create table national_grid_demand_by_day
 (
-    "date"                         date   not null,
+    "date"                         date   not null unique,
     max_national_demand            bigint not null,
     min_national_demand            bigint not null,
     avg_national_demand            bigint not null,
