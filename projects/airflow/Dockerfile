@@ -5,5 +5,6 @@ RUN pip install -r requirements.txt
 
 COPY ./entrypoint.sh /entrypoint.sh
 COPY dags /opt/airflow/dags
+ADD operators /opt/airflow/plugins/operators
 
 ENTRYPOINT  [ "/entrypoint.sh" ]

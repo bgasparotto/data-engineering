@@ -1,6 +1,8 @@
 from datetime import datetime, timedelta
+
 from airflow import DAG
-from airflow.providers.docker.operators.docker import DockerOperator
+
+from operators.spark_docker_operator import SparkBatchDockerOperator
 
 with DAG(
         "datawarehouse",
@@ -11,32 +13,14 @@ with DAG(
             'retry_delay': timedelta(minutes=10)
         }
 ) as dag:
-    import_national_grid_demand = DockerOperator(
-        task_id="import_national_grid_demand",
-        image="batch-jobs:latest",
-        environment={
-            "AWS_ENDPOINT": "http://localstack:4566",
-            "POSTGRES_HOST": "postgres:5432",
-        },
-        container_name="import_national_grid_demand_{{ ds }}",
-        command="bash -c 'spark-submit --packages=$SPARK_EXTRA_PACKAGES batch_jobs/datalake/import_national_grid_demand.py --partition {{ ds }}'",
-        network_mode="data-engineering_default",
-        auto_remove="True",
-        docker_url="tcp://docker-proxy:2375",
+    import_national_grid_demand = SparkBatchDockerOperator(
+        spark_script="batch_jobs/datalake/import_national_grid_demand.py",
+        partition="{{ ds }}",
     )
 
-    national_grid_demand_by_day = DockerOperator(
-        task_id="national_grid_demand_by_day",
-        image="batch-jobs:latest",
-        environment={
-            "AWS_ENDPOINT": "http://localstack:4566",
-            "POSTGRES_HOST": "postgres:5432",
-        },
-        container_name="national_grid_demand_by_day_{{ ds }}",
-        command="bash -c 'spark-submit --packages=$SPARK_EXTRA_PACKAGES batch_jobs/datawarehouse/national_grid_demand_by_day.py --partition {{ ds }}'",
-        network_mode="data-engineering_default",
-        auto_remove="True",
-        docker_url="tcp://docker-proxy:2375",
+    national_grid_demand_by_day = SparkBatchDockerOperator(
+        spark_script="batch_jobs/datawarehouse/national_grid_demand_by_day.py",
+        partition="{{ ds }}",
     )
 
     import_national_grid_demand >> national_grid_demand_by_day
