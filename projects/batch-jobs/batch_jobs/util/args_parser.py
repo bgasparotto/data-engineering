@@ -1,3 +1,4 @@
+import sys
 from argparse import ArgumentParser
 from dataclasses import dataclass
 
@@ -14,7 +15,10 @@ class DatePartition:
         return f"dt={self.value}"
 
 
-def read_args():
+def read_args(argv: list[str] = None):
+    if argv is None:
+        argv = sys.argv[1:]
+
     parser = ArgumentParser()
-    parser.add_argument("-p", "--partition", default="2009-01-01", help="partition of format yyyy-MM-dd")
-    return parser.parse_args()
+    parser.add_argument("-p", "--partition", required=True, help="partition of format yyyy-MM-dd")
+    return parser.parse_args(argv)
