@@ -27,13 +27,9 @@ docker build -f projects/batch-jobs/Dockerfile -t batch-jobs:latest ./projects/b
 docker compose up --build
 ```
 
-3. Allow ~30s for everything to boot then go to Airflow at http://localhost:8080.
+3. (Optional) View Airflow at http://localhost:8080 with user `admin` and password `admin`.
 
-4. Log in with user `admin` and password `admin`:
-
-5. Unpause the dag `datawarehouse`
-
-6. Observe the Dags in airflow and the container creation with `docker ps`
+4. (Optional) Watch the Docker tasks being spawned with `watch -n1 docker ps`.
 
 ## Intellij
 
