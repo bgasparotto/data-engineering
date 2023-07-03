@@ -6,7 +6,8 @@ create table national_grid_demand_by_day
     avg_national_demand            bigint not null,
     max_transmission_system_demand bigint not null,
     min_transmission_system_demand bigint not null,
-    avg_transmission_system_demand bigint not null
+    avg_transmission_system_demand bigint not null,
+    unit                           text   not null
 );
 
 create index idx_national_grid_demand_by_day_date

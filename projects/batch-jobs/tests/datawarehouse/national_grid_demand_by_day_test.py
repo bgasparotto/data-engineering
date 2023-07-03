@@ -1,5 +1,5 @@
 import pytest
-from pyspark.sql.types import StructType, StructField, DateType, IntegerType, LongType
+from pyspark.sql.types import StructType, StructField, DateType, IntegerType, LongType, StringType
 
 from batch_jobs.datawarehouse.national_grid_demand_by_day import process
 from batch_jobs.util import spark_session_provider
@@ -48,6 +48,7 @@ def test_process_returns_expected_schema(df_test_input):
         StructField("max_transmission_system_demand", LongType()),
         StructField("min_transmission_system_demand", LongType()),
         StructField("avg_transmission_system_demand", LongType()),
+        StructField("unit", StringType(), False),
     ])
 
     df_result = process(df_test_input)
@@ -57,7 +58,7 @@ def test_process_returns_expected_schema(df_test_input):
 
 def test_process_returns_expected_data(df_test_input):
     expected_data = [
-        ("2009-04-01", "38047", "21940", "32632", "38964", "23275", "33648"),
+        ("2009-04-01", "38047", "21940", "32632", "38964", "23275", "33648", "MW"),
     ]
 
     df_result = process(df_test_input)

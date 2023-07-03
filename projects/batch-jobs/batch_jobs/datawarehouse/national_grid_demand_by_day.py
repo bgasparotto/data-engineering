@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession, DataFrame
-from pyspark.sql.functions import avg, min, max, round, first, to_date
+from pyspark.sql.functions import avg, min, max, round, first, to_date, lit
 
 from batch_jobs.util import spark_session_provider, args_parser
 from batch_jobs.util.args_parser import DatePartition
@@ -16,12 +16,13 @@ def process(df_demand: DataFrame) -> DataFrame:
         max("transmission_system_demand").alias("max_transmission_system_demand"),
         min("transmission_system_demand").alias("min_transmission_system_demand"),
         round(avg("transmission_system_demand")).cast("long").alias("avg_transmission_system_demand"),
+        lit("MW").alias("unit"),
     )
 
 
 if __name__ == "__main__":
     args = args_parser.read_args()
-    partition = DatePartition("dt", args.partition)
+    partition = DatePartition("date", args.partition)
 
     layer = "data_warehouse"
     table_name = "national_grid_demand_by_day"
