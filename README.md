@@ -3,12 +3,9 @@
 Data Engineering code examples for batch processing with Python, PySpark, Airflow and AWS/Localstack.
 
 This project attempts to put together a few data technology tools and concepts in a simple way, including
-batch processing, task orchestration and usage of different data storage technologies.
+batch processing, task orchestration and usage of different data storages.
 
 ## Disclaimer
-
-I am constantly adding new jobs and expanding the data architecture in this project. Although I am not squashing
-commits, I am trying to ensure the Git history tells a fair story of its evolution :)
 
 This project uses _docker compose_ to provide services that comprise the stack, including:
 - **Localstack** for AWS S3 with initial datasets and S3 bucket as the datalake
@@ -41,3 +38,7 @@ docker compose up --build
 
 1. Load one of the projects such as [batch-jobs](projects/batch-jobs) as a project itself.
 2. Follow the respective `README.md` for build and run instructions.
+
+## Notes and Concepts
+
+- [SQL](notes/sql.md)
