@@ -11,6 +11,8 @@ This project uses _docker compose_ to provide services that comprise the stack, 
 - **Localstack** for AWS S3 with initial datasets and S3 bucket as the datalake
 - **Postgres** as the data warehouse storage
 - **Airflow** for task orchestration
+- **Trino** for the query engine
+- **Hive Metastore** for data catalogue
 - **Docker** for container management
 
 ## Projects
