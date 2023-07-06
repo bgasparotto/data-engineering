@@ -16,7 +16,7 @@ services:
       - ./compose/localstack:/etc/localstack/init/ready.d
       - ./datasets:/datasets
     healthcheck:
-      test: ["CMD", "awslocal", "s3", "ls"]
+      test: [ "CMD", "awslocal", "s3", "ls" ]
       interval: 10s
       retries: 5
       start_period: 5s
@@ -65,7 +65,7 @@ services:
     environment:
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql://postgres:password@postgres_airflow:5432/airflow
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-      - AIRFLOW__CORE__PARALLELISM=8
+      - AIRFLOW__CORE__PARALLELISM=4
       - AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION=False
     ports:
       - "8080:8080"
