@@ -8,6 +8,7 @@ batch processing, task orchestration and usage of different data storages.
 ## Disclaimer
 
 This project uses _docker compose_ to provide services that comprise the stack, including:
+
 - **Localstack** for AWS S3 with initial datasets and S3 bucket as the datalake
 - **Postgres** as the data warehouse storage
 - **Airflow** for task orchestration
@@ -19,22 +20,35 @@ This project uses _docker compose_ to provide services that comprise the stack, 
 
 - [batch-jobs](projects/batch-jobs) - Spark scripts with pyspark.
 - [airflow](projects/airflow) - Airflow DAGs and operators that run the batch jobs.
+- [hive-metastore](projects/hive-metastore) - Hive standalone metastore for mapping partitioned parquet files on S3.
 
 ## Running all together
 
 1. Build the Spark batch jobs container:
+
 ```shell
 docker build -f projects/batch-jobs/Dockerfile -t batch-jobs:latest ./projects/batch-jobs
 ```
 
 2. Run Docker Compose:
+
 ```shell
 docker compose up --build
 ```
 
-3. (Optional) View Airflow at http://localhost:8080 with user `admin` and password `admin`.
+## Inspecting stuff
 
-4. (Optional) Watch the Docker tasks being spawned with `watch -n1 docker ps`.
+- View Airflow at http://localhost:8080 with user `admin` and password `admin`.
+- Monitor Trino at http://localhost:8081 with user `trino`.
+- Watch the Docker tasks being spawned with `watch -n1 docker ps`.
+
+## Querying data
+
+- Query the **datalake** on `jdbc:trino://localhost:8081/hive` with user `trino` and no password.
+- Query the **data warehouse** on `jdbc:postgresql://localhost:5432/data_warehouse` with user `postgres` and
+  password `password`.
+- If you are curious, query the **hive metastore** on `jdbc:postgresql://localhost:5452/hive` with user `postgres` and
+  password `password`.
 
 ## Intellij
 
