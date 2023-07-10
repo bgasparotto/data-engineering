@@ -1,0 +1,1 @@
+CALL system.sync_partition_metadata('datalake', 'demand', 'ADD');
