@@ -62,11 +62,13 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - postgres_airflow
+      - trino
     environment:
       - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql://postgres:password@postgres_airflow:5432/airflow
       - AIRFLOW__CORE__EXECUTOR=LocalExecutor
       - AIRFLOW__CORE__PARALLELISM=4
       - AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION=False
+      - AIRFLOW_CONN_TRINO_HIVE=trino://trino@trino:8080/hive
     ports:
       - "8080:8080"
     healthcheck:
