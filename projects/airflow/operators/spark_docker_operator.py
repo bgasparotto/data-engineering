@@ -19,7 +19,7 @@ class SparkBatchDockerOperator(DockerOperator):
             },
             container_name=f"{spark_script_short_name}_{partition}",
             command=f"bash -c 'spark-submit --packages=$SPARK_EXTRA_PACKAGES {spark_script} --partition {partition}'",
-            network_mode="data-engineering_default",
+            network_mode="data-engineering-network-bridge",
             auto_remove="True",
             docker_url="tcp://docker-proxy:2375",
             **kwargs,

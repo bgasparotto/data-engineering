@@ -15,6 +15,8 @@ services:
     volumes:
       - ./compose/localstack:/etc/localstack/init/ready.d
       - ./datasets:/datasets
+    networks:
+      - data-engineering-network
     healthcheck:
       test: [ "CMD", "awslocal", "s3", "ls" ]
       interval: 10s
@@ -32,6 +34,8 @@ services:
       - "5432:5432"
     volumes:
       - ./compose/postgres:/docker-entrypoint-initdb.d
+    networks:
+      - data-engineering-network
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres" ]
       interval: 10s
@@ -49,6 +53,8 @@ services:
       - "5442:5432"
     volumes:
       - ./compose/postgres:/docker-entrypoint-initdb.d
+    networks:
+      - data-engineering-network
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres" ]
       interval: 10s
@@ -71,6 +77,8 @@ services:
       - AIRFLOW_CONN_TRINO_HIVE=trino://trino@trino:8080/hive
     ports:
       - "8080:8080"
+    networks:
+      - data-engineering-network
     healthcheck:
       test: [ "CMD", "airflow", "jobs", "check" ]
       interval: 10s
@@ -85,6 +93,8 @@ services:
       - "2376:2375"
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock
+    networks:
+      - data-engineering-network
     healthcheck:
       test: [ "CMD", "netstat", "-nlp", "|", "grep", ":2375" ]
       interval: 10s
@@ -100,6 +110,8 @@ services:
       - POSTGRES_PASSWORD=password
     ports:
       - "5452:5432"
+    networks:
+      - data-engineering-network
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "postgres" ]
       interval: 10s
@@ -115,6 +127,8 @@ services:
       - postgres-hive-metastore
     ports:
       - "9083:9083"
+    networks:
+      - data-engineering-network
     healthcheck:
       test: [ "CMD", "hive", "--help" ]
       interval: 10s
@@ -131,6 +145,8 @@ services:
       - hive-metastore
     volumes:
       - ./compose/trino:/etc/trino
+    networks:
+      - data-engineering-network
     healthcheck:
       test: [ "CMD", "trino", "--version" ]
       interval: 10s
@@ -145,3 +161,10 @@ services:
       interval: 10s
       retries: 5
       start_period: 5s
+
+networks:
+
+  # Explicitly creating a network prevents connection resets between containers scheduling
+  data-engineering-network:
+    name: data-engineering-network-bridge
+    driver: bridge
